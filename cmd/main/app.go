@@ -5,7 +5,7 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"rest-api-tutorial/internal/handlers/user"
+	"rest-api-tutorial/internal/user"
 	"time"
 )
 
