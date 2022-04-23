@@ -1,3 +1,4 @@
 # .gitignore for project on golang
 
 .idea
+.build
