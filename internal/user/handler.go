@@ -4,6 +4,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"rest-api-tutorial/internal/handlers"
+	"rest-api-tutorial/pkg/logging"
 )
 
 var _ handlers.Handler = &handler{}
@@ -14,14 +15,17 @@ const (
 )
 
 type handler struct {
+	logger logging.Logger
 }
 
-func NewHandler() handlers.Handler {
-	return &handler{}
+func NewHandler(logger logging.Logger) handlers.Handler {
+	return &handler{
+		logger: logger,
+	}
 }
 
 func (h *handler) Register(router *httprouter.Router) {
-	router.GET(usersURL, h.GetUserList)
+	router.HandlerFunc(http.MethodGet, usersURL, h.GetUserList)
 	router.POST(usersURL, h.CreateUser)
 	router.GET(userURL, h.GetUserByUUID)
 	router.PUT(userURL, h.UpdateUser)
@@ -29,7 +33,7 @@ func (h *handler) Register(router *httprouter.Router) {
 	router.DELETE(userURL, h.DeleteUser)
 }
 
-func (h *handler) GetUserList(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+func (h *handler) GetUserList(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(200)
 	w.Write([]byte("This is list of users"))
 }
