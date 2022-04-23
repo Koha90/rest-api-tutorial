@@ -2,3 +2,5 @@
 
 .idea
 .build
+.build/app.sock
+.build/go_build_rest_api_cmd_main.exe
