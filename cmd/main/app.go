@@ -6,10 +6,12 @@ import (
 	"net"
 	"net/http"
 	"rest-api-tutorial/internal/user"
+	"rest-api-tutorial/pkg/logging"
 	"time"
 )
 
 func main() {
+	logging.Init()
 	log.Println("create router")
 	router := httprouter.New()
 
