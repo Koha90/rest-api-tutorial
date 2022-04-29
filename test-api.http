@@ -3,7 +3,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:1234/api/v1/users
+GET http://localhost:1234/api/v1/authors
 Content-Type: application/json
 
 ###

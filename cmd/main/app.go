@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"net"
@@ -8,8 +9,11 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	author2 "rest-api-tutorial/internal/author"
+	"rest-api-tutorial/internal/author/db"
 	"rest-api-tutorial/internal/config"
 	"rest-api-tutorial/internal/user"
+	"rest-api-tutorial/pkg/client/postgresql"
 	"rest-api-tutorial/pkg/logging"
 	"time"
 )
@@ -21,13 +25,15 @@ func main() {
 
 	cfg := config.GetConfig()
 
-	//cfgMongo := cfg.MongoDB
-	//mongoDBClient, err := mongodb.NewClient(context.Background(), cfgMongo.Host, cfgMongo.Port, cfgMongo.Username,
-	//	cfgMongo.Password, cfgMongo.Database, cfgMongo.AuthDb)
-	//if err != nil {
-	//	panic(err)
-	//}
-	//storage := db.NewStorage(mongoDBClient, cfg.MongoDB.Collection, logger)
+	postgreSQLClient, err := postgresql.NewClient(context.TODO(), 3, cfg.Storage)
+	if err != nil {
+		logger.Fatalf("%v", err)
+	}
+	repository := author.NewRepository(postgreSQLClient, logger)
+
+	logger.Info("register author handler")
+	authorHandler := author2.NewHandler(repository, logger)
+	authorHandler.Register(router)
 
 	logger.Info("register user handler")
 	handler := user.NewHandler(logger)
